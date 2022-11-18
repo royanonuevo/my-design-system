@@ -1,0 +1,159 @@
+.container {
+  $text-color: rgb(148, 163, 184);
+
+  margin-bottom: 10px;
+  color: $text-color;
+  position: relative;
+
+  label,
+  .label {
+    color: inherit;
+    margin-bottom: 10px;
+    display: block;
+    cursor: default;
+  }
+
+  .controller {
+    background-color: #1f2937;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 2px solid rgb(31, 41, 55);
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+    border-color: transparent;
+    outline: 0;
+    box-sizing: border-box;
+
+    &:focus,
+    &:focus-visible,
+    &.focus {
+      border: 2px solid rgb(49, 62, 81);
+    }
+
+    .value {
+      flex: 1;
+      padding-right: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: inherit;
+
+      .placeholder {
+        color: rgb(107 114 128);
+      }
+    }
+
+    .caret {
+      display: block;
+      width: 0; 
+      height: 0; 
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid $text-color;
+    }
+  }
+
+  .pills {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    gap: 5px;
+
+    .pill {
+      padding: .1rem 0.5rem;
+      background-color: rgb(17 24 39);
+      border-radius: 5px;
+      display: flex;
+      justify-content: flex-start;
+  
+      .pill-label {
+        white-space: break-spaces;
+        word-break: break-all;
+        flex: 1;
+      }
+  
+      .close {
+        width: 20px;
+        font-size: 18px;
+        text-align: right;
+        cursor: pointer;
+        transition: all ease-in 0.25s;
+  
+        &:hover {
+          color: #FFF;
+        }
+      }
+    }
+  }
+
+  .options {
+    position: absolute;
+    z-index: 100;
+    top: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    background-color: #1f2937;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(31, 41, 55);
+    margin-top: 5px;
+    max-height: 15rem;
+    overflow-y: auto;
+    line-height: 1.5;
+    display: none;
+    
+
+    .option {
+      padding: 0.5rem;
+      color: $text-color;
+      cursor: pointer;
+      word-break: break-all;
+
+      &.selected {
+        background-color: #1a222d;
+      }
+
+      &.highlighted {
+        background-color: #2b3747;
+      }
+    }
+
+    .check {
+      display: inline-block;
+      transform: rotate(45deg);
+      height: 12px;
+      width: 6px;
+      border-bottom: 3px solid $text-color;
+      border-right: 3px solid $text-color;
+      margin-right: 10px;
+    }
+  }
+
+
+  &.show .options {
+    display: block;
+  }
+
+  &.one-liner {
+    .pills .pill {
+      overflow: hidden;
+
+      .pill-label {
+        overflow: hidden;
+        white-space: nowrap;
+        word-break: normal;
+        text-overflow: ellipsis;
+      }
+    }
+    .options .option {
+      white-space: nowrap;
+      word-break: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
