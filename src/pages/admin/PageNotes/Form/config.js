@@ -1,15 +1,16 @@
 export const formConfig = [
   {
-    name: 'name',
-    label: 'Name',
-    type: 'input',
-    inputProps: {
-      placeholder: 'Ex. John Doe',
+    name: 'title',
+    fieldProps: {
+      type: 'input',
+      label: 'Title',
+      placeholder: 'Your Title',
+      onChange: (e)=> {
+        console.log('aa')
+      }
     },
-    disabledWhen: values => {
-      return false
-    },
-    mandatoryWhen: values => null,
+    disabledWhen: null,
+    mandatoryWhen: null,
     validation: {
       type: 'string',
       label: ['Name'],
@@ -17,77 +18,56 @@ export const formConfig = [
     }
   },
   {
-    name: 'email',
-    label: 'Email',
-    type: 'input',
-    inputProps: {
-      placeholder: 'example@domain.com',
-    },
-    disabledWhen: values => {
-      return false
-    },
-    mandatoryWhen: values => null,
-    validation: {
-      type: 'string',
-      label: ['Email'],
-      required: null,
-      email: null
-    }
-  },
-  {
-    name: 'password',
-    label: 'Password',
-    type: 'input',
-    inputProps: {
-      placeholder: 'Ex. John Doe',
-    },
-    disabledWhen: values => {
-      return false
-    },
-    mandatoryWhen: values => null,
-    validation: {
-      type: 'string',
-      label: ['Password'],
-      required: null,
-      test: [
-        ['numeric'],
-        ['numeric-equal-length', 6]
+    name: 'categories',
+    fieldProps: {
+      type: 'select',
+      label: 'Categories',
+      multiple: true,
+      placeholder: 'Select categories',
+      options: [
+        { label: 'Singapore', value: 'Singapore', id: {}, name: 123 },
+        { label: 'Japan', value: 'Japan', a:false },
+        { label: 'Kyoto', value: 'Kyoto' },
+        { label: 'Indonesia', value: 'Indonesia' },
+        { label: 'Russia', value: 'Russia' },
+        { label: 'Manila', value: 'Manila' },
+        { label: 'Laguna', value: 'Laguna' },
+        { label: 'MyanmarrzzzMyanmarrzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', value: 'Myanmar' },
+        { label: 'The Philippines, officially the Republic of the Philippines, is an archipelagic country in Southeast Asia. It is situated in the western Pacific Ocean and consists of around 7,641 islands that are broadly categorized under three main geographical divisions from north to south: Luzon, Visayas, and Mindanao.', value: 'Philippines' }
       ]
+    },
+    disabledWhen: null,
+    mandatoryWhen: null,
+    validation: {
+      type: 'array',
+      label: ['Categories'],
+      min: [1, 'Mandatory field']
     }
   },
   {
-    name: 'confirmPassword',
-    label: 'Confirm Password',
-    type: 'input',
-    inputProps: {
-      placeholder: 'Ex. John Doe',
+    name: 'categories2',
+    fieldProps: {
+      type: 'select',
+      label: 'Categories 2',
+      multiple: false,
+      placeholder: 'Select categories2',
+      options: [
+        { label: 'Singapore', value: 'Singapore', id: {}, name: 123 },
+        { label: 'Japan', value: 'Japan', a:false },
+        { label: 'Kyoto', value: 'Kyoto' },
+        { label: 'Indonesia', value: 'Indonesia' },
+        { label: 'Russia', value: 'Russia' },
+        { label: 'Manila', value: 'Manila' },
+        { label: 'Laguna', value: 'Laguna' },
+        { label: 'MyanmarrzzzMyanmarrzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', value: 'Myanmar' },
+        { label: 'The Philippines, officially the Republic of the Philippines, is an archipelagic country in Southeast Asia. It is situated in the western Pacific Ocean and consists of around 7,641 islands that are broadly categorized under three main geographical divisions from north to south: Luzon, Visayas, and Mindanao.', value: 'Philippines' }
+      ]
     },
-    disabledWhen: values => {
-      return false
-    },
-    mandatoryWhen: values => null,
+    disabledWhen: null,
+    mandatoryWhen: null,
     validation: {
-      type: 'string',
-      label: ['Confirm Password'],
+      type: 'object',
       required: null,
-      oneOfRef: ['password', 'Password and confirm password fields value must be matched'],
-    }
-  },
-  {
-    name: 'birthdate',
-    label: 'Birth Date',
-    type: 'input',
-    inputProps: {
-      placeholder: 'Ex. John Doe',
-    },
-    disabledWhen: values => {
-      return false
-    },
-    mandatoryWhen: values => null,
-    validation: {
-      type: 'string',
-      label: ['Birth Date'],
-      required: null
     }
   },
 ]

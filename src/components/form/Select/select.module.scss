@@ -104,6 +104,7 @@
     max-height: 15rem;
     overflow-y: auto;
     line-height: 1.5;
+    box-shadow: rgb(13 22 38 / 10%) 0px 0px 0px 1px, rgb(13 22 38 / 10%) 0px 4px 11px ;
     display: none;
     
 
@@ -133,6 +134,15 @@
     }
   }
 
+  .error {
+    display: flex;
+    align-items: center;
+    color: rgb(239 68 68);
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+
 
   &.show .options {
     display: block;
@@ -154,6 +164,12 @@
       word-break: normal;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+  }
+
+  &.has-error {
+    .controller {
+      border-color: rgb(239 68 68)
     }
   }
 }

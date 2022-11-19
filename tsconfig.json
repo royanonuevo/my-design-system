@@ -18,6 +18,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
     "jsx": "react-jsx",
     "baseUrl": "src",
     // "paths": {

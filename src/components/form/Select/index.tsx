@@ -11,7 +11,10 @@ const Select = ({
   label,
   value,
   placeholder = 'Select an option',
-  onChange
+  noOptionsLabel = 'No options available',
+  error = '',
+  onChange,
+  onBlur
 }: SelectProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const controllerRef = useRef<HTMLDivElement>(null)
@@ -19,10 +22,14 @@ const Select = ({
   const [isOpen, setIsOpen] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null)
   const [isFocusController, setFocusController] = useState<boolean>(false)
-
+  const hasError = Boolean(error)
   let filteredOptions = [...options]
   if (multiple && removeOptionWhenSelected) {
-    filteredOptions = filteredOptions.filter(o => !value.includes(o))
+    filteredOptions = filteredOptions.filter(o => !value?.includes(o))
+  }
+
+  if (filteredOptions.length === 0) {
+    filteredOptions.push({ label: noOptionsLabel, value: ''})
   }
 
   const focusController = () => {
@@ -35,31 +42,39 @@ const Select = ({
   }
 
   const changeOption = (option: SelectOption) => {
+    onBlur && onBlur()
+
+    if (filteredOptions.length === 1 && option?.label === noOptionsLabel) return
+
     if (multiple) {
-      if (value.includes(option)) {
-        onChange(value.filter(o => o !== option))
+      if (value?.includes(option)) {
+        onChange?.(value.filter(o => o !== option))
       } else {
-        onChange([...value, option])
+        if (Array.isArray(value)){ 
+          onChange?.([...value, option])
+        }
       }
     } else {
-      if (option !== value && onChange) {
-        onChange(option)
-      }
+        onChange?.(option !== value? option : undefined)
     }
   }
 
   const isOptionSelected = (option: SelectOption) => {
-    return multiple? value.includes(option) : option === value
+    return multiple? value?.includes(option) : option === value
   }
   
   useEffect(() => {
     const handleClickOutside = (e: any) => {
       if (containerRef.current && !containerRef.current.contains(e.target) && isOpen) {
         closeOptions()
+        onBlur && onBlur()
       }
 
       if ((controllerRef.current && !controllerRef.current.contains(e.target)) && labelRef.current && !labelRef.current.contains(e.target)) {
         setFocusController(false)
+        if (isFocusController) {
+          onBlur && onBlur()
+        }
       }
     }
     const handleSelectKeydown = (e: KeyboardEvent) => {
@@ -95,6 +110,7 @@ const Select = ({
         case 'Tab': {
           closeOptions()
           setFocusController(false)
+          onBlur && onBlur()
           break
         }
       }
@@ -112,13 +128,13 @@ const Select = ({
   return (
     <div 
       ref={containerRef}
-      className={`${styles.container} ${isOpen? styles.show : ''} ${optionOneLiner? styles['one-liner'] : ''}`}
+      className={`${styles.container} ${isOpen? styles.show : ''} ${optionOneLiner? styles['one-liner'] : ''} ${hasError? styles['has-error'] : ''}`}
     >
       <div 
         ref={labelRef}
         className={styles.label}
         onClick={() => {
-          
+          setFocusController(true)
           setIsOpen(prev => !prev)
         }}
       >
@@ -135,11 +151,18 @@ const Select = ({
         isFocusController={isFocusController}
       />
 
+      { hasError? (
+        <span className={styles.error}>
+          { error }
+        </span>
+      ) : null}
+
       {/* Options List */}
       <ul className={styles.options}>
         {
           filteredOptions.map((option, index) => {
             const isSelected = isOptionSelected(option)
+
             return (
               <li 
                 key={option.value} 
@@ -166,7 +189,6 @@ const Select = ({
 }
 
 export type { 
-  SelectOption, 
-  SelectProps 
+  SelectOption
 }
 export default Select

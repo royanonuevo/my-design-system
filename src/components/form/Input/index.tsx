@@ -11,7 +11,7 @@ type InputProps = {
   register?: Function,
   disabled?: boolean,
   // handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
-}
+} & React.ComponentProps<'input'>
 
 const Input = ({
   type = 'text',
