@@ -1,6 +1,7 @@
 const View = ({
   users,
-  removeUser
+  removeUser,
+  editUser
 }) => {  
   return (
     <>
@@ -11,9 +12,16 @@ const View = ({
           return (
             <li 
               key={user.username}
-              className='flex justify-between'
+              className='flex justify-between gap-2'
             >
-              <span>{ user.username } ({user.active.toString()}) - { user.roles?.join(', ') }</span>
+              <span className="grow">{ user.username } ({user.active.toString()}) - { user.roles?.join(', ') }</span>
+
+              <span 
+                onClick={() => editUser(user)} 
+                className="cursor-pointer text-red-700"
+              >
+                edit
+              </span>
               <span 
                 onClick={() => removeUser(user._id)} 
                 className="cursor-pointer text-red-700"

@@ -1,15 +1,17 @@
 import { useState } from 'react'
 import Section from 'components/layouts/Section'
 import View from './View'
-import { useGetUsersQuery, useAddUserMutation, useDeleteUserMutation } from 'app/api/usersApi'
+import { useGetUsersQuery, useAddUserMutation, useDeleteUserMutation, useUpdateUserMutation } from 'app/api/usersApi'
 import Form from './Form'
 import { Button } from 'components/form'
 
 const PageUsers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [ userData, setUserData ] = useState({})
   const { isLoading, isError, isSuccess, data: users } = useGetUsersQuery('User')
   const [ addUser ] = useAddUserMutation()
   const [ deleteUser ] = useDeleteUserMutation()
+  const [ updateUser ] = useUpdateUserMutation()
   
   let content = <></>
 
@@ -20,6 +22,14 @@ const PageUsers = () => {
 
   const removeUser = async (id: string) => {
     await deleteUser({id})
+  }
+
+  const editUser = (user: object) => {
+    setUserData({
+      ...user,
+      type: 'edit'
+    })
+    setIsModalOpen(true)
   }
  
   if (isLoading) {
@@ -34,12 +44,28 @@ const PageUsers = () => {
     content = (
       <>
         <div className='relative z-10' onClick={() => console.log('aa')}>
-          <Button label='Add User' onClick={() => setIsModalOpen(true)} />
+          <Button 
+            label='Add User' 
+            onClick={() => {
+              setIsModalOpen(true)
+              setUserData({
+                type: 'add'
+              })
+            }} 
+          />
 
           <Form 
             isModalOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             addNewUser={addNewUser}
+            updateUser={async (user: object) => {
+              await updateUser({
+                ...user,
+                active: true
+              })
+              setIsModalOpen(false)
+            }}
+            data={userData}
           />
 
         </div>
@@ -49,13 +75,7 @@ const PageUsers = () => {
           <View 
             users={users}
             removeUser={removeUser}
-          />
-        </Section>
-          
-        <Section>
-          <View 
-            users={users}
-            removeUser={removeUser}
+            editUser={editUser}
           />
         </Section>
       </>

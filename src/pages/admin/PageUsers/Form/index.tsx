@@ -1,34 +1,70 @@
 import FieldController, { Button } from 'components/form'
 import Modal from 'components/Modal'
 import { useFormik } from 'formik'
-import { formConfig } from './config'
+import { formConfig, rolesOption } from './config'
 import { formikResolver } from 'utilities/jsonToYupSchema'
 
 type FormProps = {
-  addNewUser: Function
+  addNewUser: Function,
+  updateUser: Function
   onClose: () => void
-  isModalOpen: boolean
+  isModalOpen: boolean,
+  data: any
 }
 
 const Form = ({
   isModalOpen,
   addNewUser,
-  onClose
+  updateUser,
+  onClose,
+  data
 }: FormProps) => {
+  
+  const getInitialValues = () => {
+    let initialValues: {
+      username: string,
+      password: string,
+      roles: any
+    } = {
+      username: data?.username?? '',
+      password: 'pass',
+      roles: [],
+    }
+
+    if (data?.type === 'edit') {
+      initialValues = {
+        ...initialValues,
+        username: data?.username?? '',
+      }
+
+      if (Array.isArray(data.roles) && data.roles.length) {
+        initialValues.roles = rolesOption.filter(role => {
+          return data.roles.includes(role.value)
+        })
+      }
+    }
+    
+    return initialValues
+  }
 
   const formik = useFormik({
-    initialValues: {
-      username: '',
-      password: 'passpass123',
-      roles: [],
-    },
-    onSubmit: (values, { resetForm }) => {
-      addNewUser({
-        username: values.username,
-        roles: values.roles.map((role: any) => role.value),
-        password: values.password
-      })
-     resetForm()
+    initialValues: getInitialValues(),
+    onSubmit: (values: any, { resetForm }) => {
+      if (data?.type === 'add') {
+        addNewUser({
+          username: values.username,
+          roles: values.roles.map((role: any) => role.value),
+          password: values.password
+        })
+        resetForm()
+      } else {
+        updateUser({
+          id: data.id,
+          username: values.username,
+          roles: values.roles.map((role: any) => role.value),
+          password: values.password
+        })
+      }
     },
     validate: values => formikResolver(formConfig, values),
     enableReinitialize: true
@@ -68,7 +104,7 @@ const Form = ({
             onClick={onClose}
           />
           <Button 
-            label="Create New User"
+            label={data?.type === 'edit'? 'Update User' : 'Create New User'}
             type='submit'
           />
         </div>

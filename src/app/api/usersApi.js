@@ -46,7 +46,9 @@ const usersApi = baseApi.injectEndpoints({
         method: 'PATCH',
         body: payload,
       }),
-      invalidatesTags: (result, error, arg) => [{ type: 'Post', id: arg.id }],
+      invalidatesTags: (result, error, arg) => {
+        return [{ type: 'User', id: arg.id }]
+      },
     }),
   })
 })

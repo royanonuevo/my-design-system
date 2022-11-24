@@ -1,3 +1,10 @@
+export const rolesOption = [
+  { label: 'Staff', value: 'Staff' },
+  { label: 'Manager', value: 'Manager' },
+  { label: 'Supervisor', value: 'Supervisor' },
+]
+
+
 export const formConfig = [
   {
     name: 'username',
@@ -37,11 +44,7 @@ export const formConfig = [
       label: 'Roles',
       multiple: true,
       placeholder: 'Select roles',
-      options: [
-        { label: 'Staff', value: 'Staff' },
-        { label: 'Manager', value: 'Japan' },
-        { label: 'Supervisor', value: 'Supervisor' },
-      ]
+      options: rolesOption
     },
     disabledWhen: null,
     mandatoryWhen: null,
