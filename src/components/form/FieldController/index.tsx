@@ -43,7 +43,8 @@ const FieldController = ({
       return (
         <Input 
           {...otherFieldProps}
-          name='title'
+          type={type}
+          name={name}
           value={values?.[name]}
           onChange={handleChange}
           onBlur={handleBlur}

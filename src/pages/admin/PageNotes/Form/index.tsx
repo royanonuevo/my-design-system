@@ -8,8 +8,11 @@ const NoteForm = () => {
   const formik = useFormik({
     initialValues: {
       title: '',
-      categories: [],
-      categories2: undefined
+      categories: [
+        { label: 'Singapore', value: 'Singapore', id: {}, name: 123 },
+        { label: 'Japan', value: 'Japan2', a:false },
+      ],
+      categories2: { label: 'Japan', value: 'Japan2', a:false }
     },
     onSubmit: values => {
      console.log(values)

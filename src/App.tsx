@@ -9,6 +9,7 @@ const PageLogin = lazy(() => import('pages/PageLogin'))
 const PageRegistration = lazy(() => import('pages/PageRegistration'))
 const PageDashboard = lazy(() => import('pages/admin/PageDashboard'))
 const PageNotes = lazy(() => import('pages/admin/PageNotes'))
+const PageUsers = lazy(() => import('pages/admin/PageUsers'))
 const Page404 = lazy(() => import('pages/Page404'))
 
 function App() {
@@ -34,6 +35,10 @@ function App() {
           <Route
             path={paths.PATH_NOTES}
             element={<PageSuspense el={<PageNotes />} />}
+          />
+          <Route
+            path={paths.PATH_USERS}
+            element={<PageSuspense el={<PageUsers />} />}
           />
         </Route>
 

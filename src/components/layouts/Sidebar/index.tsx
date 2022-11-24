@@ -1,5 +1,6 @@
 import { BiLogOut, BiBarChartSquare, BiNotepad } from "react-icons/bi"
 import { Link, useLocation } from 'react-router-dom'
+import * as paths from 'config/paths'
 
 const Sidebar = () => {
   const { pathname } = useLocation()
@@ -8,17 +9,22 @@ const Sidebar = () => {
     {
       label: 'Dashboard',
       icon: <BiBarChartSquare />,
-      link: "/dashboard"
+      link: paths.PATH_DASHBOARD
+    },
+    {
+      label: 'Users',
+      icon: <BiNotepad />,
+      link: paths.PATH_USERS
     },
     {
       label: 'Notes',
       icon: <BiNotepad />,
-      link: "/notes"
+      link: paths.PATH_NOTES
     },
     {
       label: 'Logout',
       icon: <BiLogOut />,
-      link: "/"
+      link: paths.PATH_LOGIN
     },
   ]
   return (

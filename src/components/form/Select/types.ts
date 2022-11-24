@@ -26,7 +26,10 @@ export type SelectProps = {
   noOptionsLabel?: string
   optionOneLiner?: boolean
   error?: string,
-  onBlur?: Function
+  onBlur?: Function,
+  maxOptionsHeight?: string,
+  disabled?: boolean,
+  readOnly?: boolean,
 } & (SingleSelectProps | MultipleSelectProps)
 
 

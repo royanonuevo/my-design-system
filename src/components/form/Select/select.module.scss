@@ -11,6 +11,10 @@
     margin-bottom: 10px;
     display: block;
     cursor: default;
+
+    &:focus {
+      outline: none;
+    }
   }
 
   .controller {
@@ -34,9 +38,7 @@
     .value {
       flex: 1;
       padding-right: 10px;
-      white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
       color: inherit;
 
       .placeholder {
@@ -101,12 +103,10 @@
     border-radius: 0.5rem;
     border: 1px solid rgb(31, 41, 55);
     margin-top: 5px;
-    max-height: 15rem;
     overflow-y: auto;
     line-height: 1.5;
     box-shadow: rgb(13 22 38 / 10%) 0px 0px 0px 1px, rgb(13 22 38 / 10%) 0px 4px 11px ;
     display: none;
-    
 
     .option {
       padding: 0.5rem;
@@ -170,6 +170,16 @@
   &.has-error {
     .controller {
       border-color: rgb(239 68 68)
+    }
+  }
+
+  &.read-only,
+  &.disabled {
+    .controller { 
+      cursor: default;
+    }
+    .pills .pill .close {
+      display: none;
     }
   }
 }

@@ -34,7 +34,7 @@ const getEquivalentTest = (
       case 'numeric':
         return {
           name: 'string-numeric',
-          messages: params[1] || `${label} must be numeric characters`,
+          messages: params[1]?? `${label} must be numeric characters`,
           function: testIsNumeric
         }
       case 'noleading_zero':
@@ -52,14 +52,14 @@ const getEquivalentTest = (
       case 'maximum-length':
         return {
           name: 'string-maximum-length',
-          messages: params[2] || `${params[1]} character limit exceeded`,
+          messages: params[2]?? `${params[1]} character limit exceeded`,
           function: (value) => testIsMaxLength(value, params[1])
         }
       case 'numeric-equal-length':
         return {
           name: 'numeric-equal-length',
           messages:
-            params[2] ||
+            params[2]??
             `${label} must be exactly ${params[1]} numeric ${
               params[1] > 1 ? 'characters' : 'character'
             }`,
@@ -183,7 +183,7 @@ const createYupSchema = (fields) => {
   fields.forEach(field => {
     let obj = field.validation
     const fieldType = field.validation.type
-    const fieldLabel = field?.validation?.label || field.name
+    const fieldLabel = field?.validation?.label?? field.name
     let validator
 
     if (!Yup[fieldType]) {

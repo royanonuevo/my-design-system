@@ -5,6 +5,7 @@ export const formConfig = [
       type: 'input',
       label: 'Title',
       placeholder: 'Your Title',
+      readOnly: true,
       onChange: (e)=> {
         console.log('aa')
       }

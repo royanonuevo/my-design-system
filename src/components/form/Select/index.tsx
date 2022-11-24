@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect } from 'react'
-import styles from './select.module.scss'
+import React, { useState, useRef } from 'react'
+import styles from './Select.module.scss'
 import { SelectOption, SelectProps } from './types'
 import Controller from './Controller'
+import clx from 'utilities/clx'
 
 const Select = ({
   multiple,
@@ -14,11 +15,12 @@ const Select = ({
   noOptionsLabel = 'No options available',
   error = '',
   onChange,
-  onBlur
+  onBlur,
+  disabled,
+  readOnly,
+  maxOptionsHeight = '15rem'
 }: SelectProps) => {
-  const containerRef = useRef<HTMLDivElement>(null)
   const controllerRef = useRef<HTMLDivElement>(null)
-  const labelRef = useRef<HTMLDivElement>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null)
   const [isFocusController, setFocusController] = useState<boolean>(false)
@@ -39,6 +41,11 @@ const Select = ({
   const closeOptions = () => {
     setIsOpen(false)
     setHighlightedIndex(null)
+  }
+
+  const openOptions = () => {
+    if (disabled || readOnly) return
+    setIsOpen(prev => !prev)
   }
 
   const changeOption = (option: SelectOption) => {
@@ -62,81 +69,68 @@ const Select = ({
   const isOptionSelected = (option: SelectOption) => {
     return multiple? value?.includes(option) : option === value
   }
-  
-  useEffect(() => {
-    const handleClickOutside = (e: any) => {
-      if (containerRef.current && !containerRef.current.contains(e.target) && isOpen) {
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    switch(e.code) {
+      case 'Space':
+        openOptions()
+        break
+      case 'Enter':
+        if (isOpen && highlightedIndex !== null) {
+          changeOption(filteredOptions[highlightedIndex])
+          closeOptions()
+          focusController()
+        }
+        break
+      case 'Escape':
         closeOptions()
-        onBlur && onBlur()
-      }
+        break
+      case 'ArrowUp':
+      case 'ArrowDown': {
+        if (!isOpen) {
+          openOptions()
+          break
+        }
 
-      if ((controllerRef.current && !controllerRef.current.contains(e.target)) && labelRef.current && !labelRef.current.contains(e.target)) {
+        const newValue = (highlightedIndex !== null? highlightedIndex : -1) + (e.code === 'ArrowDown'? 1 : -1)
+        if (newValue >= 0 && newValue < filteredOptions.length) {
+          setHighlightedIndex(newValue)
+        }
+        break
+      } 
+      case 'Tab': {
+        closeOptions()
         setFocusController(false)
-        if (isFocusController) {
-          onBlur && onBlur()
-        }
+        onBlur && onBlur()
+        break
       }
     }
-    const handleSelectKeydown = (e: KeyboardEvent) => {
-      if (e.target !== controllerRef.current) return
+  }
 
-      switch(e.code) {
-        case 'Space':
-          setIsOpen(prev => !prev)
-          break
-        case 'Enter':
-          if (isOpen && highlightedIndex !== null) {
-            changeOption(filteredOptions[highlightedIndex])
-            closeOptions()
-            focusController()
-          }
-          break
-        case 'Escape':
-          closeOptions()
-          break
-        case 'ArrowUp':
-        case 'ArrowDown': {
-          if (!isOpen) {
-            setIsOpen(true)
-            break
-          }
-
-          const newValue = (highlightedIndex !== null? highlightedIndex : -1) + (e.code === 'ArrowDown'? 1 : -1)
-          if (newValue >= 0 && newValue < filteredOptions.length) {
-            setHighlightedIndex(newValue)
-          }
-          break
-        } 
-        case 'Tab': {
-          closeOptions()
-          setFocusController(false)
-          onBlur && onBlur()
-          break
-        }
-      }
+  const handleBlur = (e: React.FocusEvent) => {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      closeOptions()
+      setFocusController(false)
+      onBlur && onBlur()
     }
-
-    document.addEventListener('click', handleClickOutside)
-    document.addEventListener('keydown', handleSelectKeydown)
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside)
-      document.removeEventListener('keydown', handleSelectKeydown)
-    }
-  }, [isOpen, highlightedIndex, filteredOptions]) // eslint-disable-line
+  }
 
   return (
     <div 
-      ref={containerRef}
-      className={`${styles.container} ${isOpen? styles.show : ''} ${optionOneLiner? styles['one-liner'] : ''} ${hasError? styles['has-error'] : ''}`}
+      onKeyDown={handleKeyDown}
+      onBlur={handleBlur}
+      className={clx(styles.container, {
+        [styles.show]: isOpen,
+        [styles['one-liner']]: optionOneLiner,
+        [styles['has-error']]: hasError,
+        [styles.disabled]: disabled,
+        [styles['read-only']]: readOnly
+      })}
     >
       <div 
-        ref={labelRef}
         className={styles.label}
-        onClick={() => {
-          setFocusController(true)
-          setIsOpen(prev => !prev)
-        }}
+        onClick={() => focusController()}
+        tabIndex={-1} // tricks: so that onKeyDown will work when this is clicked
       >
         { label }
       </div>
@@ -147,10 +141,12 @@ const Select = ({
         multiple={multiple}
         changeOption={changeOption}
         controllerRef={controllerRef}
-        handleClick={() => setIsOpen(prev => !prev)}
+        handleClick={() => {
+          setFocusController(true)
+          openOptions()
+        }}
         isFocusController={isFocusController}
       />
-
       { hasError? (
         <span className={styles.error}>
           { error }
@@ -158,11 +154,10 @@ const Select = ({
       ) : null}
 
       {/* Options List */}
-      <ul className={styles.options}>
+      <ul className={styles.options} tabIndex={-1} style={{maxHeight: maxOptionsHeight}}>
         {
           filteredOptions.map((option, index) => {
             const isSelected = isOptionSelected(option)
-
             return (
               <li 
                 key={option.value} 

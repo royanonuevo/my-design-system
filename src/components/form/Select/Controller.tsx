@@ -1,4 +1,4 @@
-import styles from './select.module.scss'
+import styles from './Select.module.scss'
 import { SelectOption, ControllerProps } from './types'
 
 const Controller = ({

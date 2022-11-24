@@ -35,7 +35,7 @@ const PageLogin = () => {
           
           <Button 
             label="Sign In"
-            onClick={() => navigate(paths.PATH_DASHBOARD)} 
+            onClick={() => navigate(paths.PATH_DASHBOARD)}
           />
         </form>
       </section>

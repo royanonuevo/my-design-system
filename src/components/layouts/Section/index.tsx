@@ -8,7 +8,7 @@ const Section = ({
   className = ''
 }: SectionProps) => {
   return (
-    <section className={`bg-gray-900 p-5 ${className}`}>
+    <section className={`bg-gray-900 p-5 mb-5 ${className}`}>
       { children }
     </section>
   )
