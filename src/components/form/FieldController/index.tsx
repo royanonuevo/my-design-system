@@ -34,11 +34,12 @@ const FieldController = ({
           {...otherFieldProps}
           options={getOptions()}
           value={values?.[name]}
-          onChange={(o) => setFieldValue(name, o)}
+          onChange={(o: any) => setFieldValue(name, o)}
           onBlur={() => setFieldTouched(name, true)}
           error={errorText}
         />
       )
+
     default:
       return (
         <Input 
